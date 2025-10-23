@@ -10,9 +10,7 @@ import (
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-mainLoop:
 	for {
-	startLoop:
 		fmt.Println("Enter chessboard size:")
 		sizeInput := getInput(reader)
 		size, err := strconv.Atoi(sizeInput)
@@ -20,31 +18,31 @@ mainLoop:
 		if err != nil {
 			fmt.Println("It is not a valid size, try again.")
 			fmt.Println()
-			goto startLoop
+			continue
 		} else {
 			drawBoard(size)
-		}
 
-		fmt.Println()
+			for {
+				fmt.Println()
+				fmt.Println("Try again? (y/n)")
+				retry := getInput(reader)
+				switch retry {
+				case "y":
+					fmt.Println()
+				case "n":
+					return
+				default:
+					fmt.Println("Answer is not valid.")
+					fmt.Println()
+					continue
+				}
+				break
+			}
 
-	retryRequest:
-		fmt.Println("Try again? (y/n)")
-		retry := getInput(reader)
-
-		switch retry {
-		case "y":
-			fmt.Println()
-			continue
-		case "n":
-			break mainLoop
-		default:
-			fmt.Println("Answer is not valid. Try again")
-
-			fmt.Println()
-			goto retryRequest
 		}
 	}
 }
+
 func getInput(b *bufio.Reader) string {
 	fmt.Print("-> ")
 	s, _ := b.ReadString('\n')
